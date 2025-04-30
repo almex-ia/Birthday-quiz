@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Birthday Quiz Invite 🎉</title>
+
+  <!-- Cute Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+
+  <!-- Confetti Script -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: #fffcff;
+      color: rgb(34, 21, 110);
+      padding: 40px;
+      max-width: 800px;
+      margin: auto;
+      border-radius: 40px;
+      box-shadow: 0 0 35px rgba(32, 1, 16, 0.2);
+    }
+
+    h1 {
+      text-align: center;
+      color: #1e0a56;
+    }
+
+    .question {
+      margin: 20px 0;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    button {
+      background-color: #063c62;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px 5px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+    button:hover {
+      background-color: #2e127a;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .result {
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 45px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎉 Can You Unlock My Birthday Invite? 🎉</h1>
+  <div id="quiz"></div>
+  <div class="result hidden" id="result"></div>
+
+  <script>
+    const quizData = [
+      {
+        question: "What is my favorite color?",
+        options: ["Blue", "Black", "Red", "Green", "Purple", "White"],
+        answer: 3
+      },
+      {
+        question: "What’s my go-to snack?",
+        options: ["Chips", "Chocolate", "Fruit", "Popcorn"],
+        answer: 1
+      },
+      {
+        question: "If I could travel anywhere, where would I go?",
+        options: ["Tokyo", "Paris", "New York", "Rome", "Poland", "Copenhagen"],
+        answer: 3
+      },
+      {
+        question: "Which one would I choose?",
+        options: ["Beach", "Mountains", "City lights", "Cozy cabin"],
+        answer: 1
+      },
+      {
+        question: "What’s my birthday month?",
+        options: ["January", "April", "June", "August", "May"],
+        answer: 4
+      },
+      {
+        question: "What pet would I choose?",
+        options: ["Dog", "Cat", "Bird", "Hamster"],
+        answer: 1
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+    const quizContainer = document.getElementById("quiz");
+    const resultContainer = document.getElementById("result");
+
+    function showQuestion() {
+      const q = quizData[currentQuestion];
+      quizContainer.innerHTML = `<div class="question">
+        <p><strong>Q${currentQuestion + 1}:</strong> ${q.question}</p>
+        ${q.options.map((opt, i) => `<button onclick="submitAnswer(${i})">${opt}</button>`).join('')}
+      </div>`;
+    }
+
+    function submitAnswer(selected) {
+      if (selected === quizData[currentQuestion].answer) {
+        score++;
+      }
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      quizContainer.classList.add("hidden");
+      resultContainer.classList.remove("hidden");
+
+      if (score === 6) {
+        startConfetti();
+        resultContainer.innerHTML = `
+           You got ${score}/6!<br><br>
+          🎂 You're officially invited to my birthday bash! 🎈<br>
+          📍 <strong>Location:</strong> Sofra e Ariut 🐻 <br>
+          🗓 <strong>Date:</strong> May 09 <br>
+           <strong>Time:</strong> 1:00 PM<br>
+          💌 Can't wait to see you!<br><br>
+          <img src="https://i.imgur.com/vtLeqWv.gif" alt="Celebration GIF" style="width:300px; border-radius:12px;" />
+        `;
+      } else {
+        resultContainer.innerHTML = `
+          😅 You got ${score}/6...<br><br>
+          But hey, you're still invited to my birthday party! 🎉<br>
+          📍 <strong>Location:</strong> Sofra e Ariut 🐻 <br>
+          🗓 <strong>Date:</strong> May 09 <br>
+           <strong>Time:</strong> 1:00 PM<br>
+          Better luck next year knowing me better 😉<br><br>
+          <img src="https://i.imgur.com/LFiMiJf.gif" alt="Oops GIF" style="width:300px; border-radius:12px;" />
+        `;
+      }
+    }
+
+    function startConfetti() {
+      const duration = 5 * 1000;
+      const animationEnd = Date.now() + duration;
+
+      (function frame() {
+        confetti({
+          particleCount: 5,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 }
+        });
+        confetti({
+          particleCount: 5,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 }
+        });
+
+        if (Date.now() < animationEnd) {
+          requestAnimationFrame(frame);
+        }
+      })();
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
